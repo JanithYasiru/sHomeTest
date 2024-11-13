@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 LED Control</title>
+    <script>
+        async function toggleLED() {
+            // Set up request to Arduino IoT Cloud
+            const apiUrl = "https://api2.arduino.cc/iot/v2/things/dd7f3418-6602-4e50-bee7-1ceaeebfa9f7/properties/fd6b152b-bb9e-4e08-8c43-38dd26b204dc/publish";
+            const apiKey = "pogh4O8iLSpea1aUUJCjomLZZJhPBAQh"; // Replace with your actual API key
+            const ledStatus = document.getElementById("ledSwitch").checked;
+
+            try {
+                const response = await fetch(apiUrl, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${apiKey}`,
+                    },
+                    body: JSON.stringify({
+                        value: ledStatus
+                    })
+                });
+                const result = await response.json();
+                console.log("Response:", result);
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Control ESP32 LED</h1>
+    <label>
+        <input type="checkbox" id="ledSwitch" onclick="toggleLED()"> LED ON/OFF
+    </label>
+</body>
+</html>
